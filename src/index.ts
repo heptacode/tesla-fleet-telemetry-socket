@@ -29,13 +29,14 @@ mqtt.on('connect', () => {
 });
 
 mqtt.on('message', (topic, message) => {
-  console.log('📡', topic, message);
+  const value = JSON.parse(message.toString());
   const [_, vin, type, key] = topic.split('/');
 
   if (type === 'v') {
-    telemetryMap.set(`${vin}.${key}`, message);
-    io.emit('telemetry', { key: `${vin}.${key}`, value: message });
+    io.emit('telemetry', { [`${vin}.${key}`]: value });
+    telemetryMap.set(`${vin}.${key}`, value);
   }
+  console.log('📡', topic, value);
 });
 
 server.listen(PORT, () => {
