@@ -30,11 +30,11 @@ mqtt.on('connect', () => {
 
 mqtt.on('message', (topic, message) => {
   const value = JSON.parse(message.toString());
-  const [_, vin, type, key] = topic.split('/');
+  const [topicBase, vin, type, key] = topic.split('/');
 
   if (type === 'v') {
-    io.emit('telemetry', { [`${vin}.${key}`]: value });
-    telemetryMap.set(`${vin}.${key}`, value);
+    io.emit('telemetry', { [key]: value });
+    telemetryMap.set(key, value);
   }
   console.log('📡', topic, value);
 });
