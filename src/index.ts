@@ -1,11 +1,11 @@
-import express from 'express';
-import { createServer } from 'http';
+import { Hono } from 'hono';
+import { createAdaptorServer } from '@hono/node-server';
 import { Server as SocketIOServer } from 'socket.io';
 import { connect as connectMQTT } from 'mqtt';
 import 'dotenv/config';
 
-const app = express();
-const server = createServer(app);
+const app = new Hono();
+const server = createAdaptorServer(app);
 
 const PORT = process.env.PORT || 8080;
 const MQTT_URL = process.env.MQTT_URL || 'mqtt://10.0.0.2:1883';
@@ -37,6 +37,14 @@ mqtt.on('message', (topic, message) => {
     telemetryMap.set(key, value);
   }
   console.log('📡', topic, value);
+});
+
+app.get('/telemetry', c => {
+  return c.json(Object.fromEntries(telemetryMap));
+});
+
+app.get('/health', c => {
+  return c.body(null, 200);
 });
 
 server.listen(PORT, () => {
