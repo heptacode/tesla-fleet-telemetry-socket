@@ -5,8 +5,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "start": "tsx src/index.ts",
+    "dev": "tsx watch src/app.ts",
+    "start": "tsc && node dist/app.js",
     "docker:build": "docker buildx build --platform linux/amd64 -t tesla-fleet-telemetry-websocket ."
   },
   "dependencies": {
