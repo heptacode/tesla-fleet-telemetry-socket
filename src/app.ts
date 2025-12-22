@@ -36,7 +36,9 @@ mqtt.on('message', (topic, message) => {
     io.emit('telemetry', { [key]: value });
     telemetryMap.set(key, value);
   }
-  console.log('📡', topic, value);
+  if (process.env.NODE_ENV === 'development') {
+    console.log('📡', topic, value);
+  }
 });
 
 app.get('/telemetry', c => {
