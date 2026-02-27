@@ -46,7 +46,7 @@ app.get('/telemetry', c => {
 });
 
 app.get('/health', c => {
-  return c.body(null, 200);
+  return c.body('OK', 200);
 });
 
 server.listen(PORT, () => {
